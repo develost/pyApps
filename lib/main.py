@@ -9,10 +9,15 @@ import os
 import re
 
 # server connection for updates
-server='localhost'
-port=18080
-url='/apps/pyupdater.php'
-useSSL=False
+#server='localhost'
+#port=18080
+#url='/apps'
+#useSSL=False
+
+server='www.develost.com'
+port=443
+url='/apps'
+useSSL=True
 extCfg='cfg'
 extLog='log'
 
@@ -31,7 +36,7 @@ def __loadConfig__():
     replaceConfiguration = False
     lines = []
     try:
-        with open ('cfg/'+projectName+'.'+extCfg, 'r') as cfgFile:
+        with open (os.path.dirname(os.path.abspath(__file__)) +'/../cfg/'+projectName+'.'+extCfg, 'r') as cfgFile:
             lines = [line.rstrip() for line in cfgFile]
     except IOError as ioe:
         print "Config file not found - creating one from scratch"
@@ -64,7 +69,7 @@ def __loadConfig__():
         version = versionList[0].replace("version=","",1).strip()
 
     if replaceConfiguration:    
-        with open('cfg/'+projectName+'.'+extCfg, 'w') as cfgFile:
+        with open(os.path.dirname(os.path.abspath(__file__)) +'/../cfg/'+projectName+'.'+extCfg, 'w') as cfgFile:
             cfgFile.write('\n'.join(lines) + '\n')            
     return
     
@@ -82,7 +87,8 @@ def __retrieveCode__():
         connection = httplib.HTTPSConnection(server,port)
     else:
         connection = httplib.HTTPConnection(server,port)
-    connection.request("POST",url,params,headers)
+        
+    connection.request("POST",url+'/'+projectName+'/'+version+'/'+'index.php',params,headers)
     response = connection.getresponse()
     
     print response.reason
@@ -99,9 +105,11 @@ def __main__():
     print "password",password
     
     code = __retrieveCode__()
-    print code
+    #print code
     if code:
-        exec code
+        #exec code
+        exec (code, globals())
+        entryPoint()
     return
 
 def main():
@@ -110,7 +118,7 @@ def main():
     projectName = os.path.basename(fileName)
     if re.match('[A-Za-z0-9 ]+',projectName):
         __loadConfig__()
-        logging.basicConfig(filename='log/'+projectName+'.'+extLog,format='%(asctime)s %(message)s',level=logging.DEBUG)
+        logging.basicConfig(filename=os.path.dirname(os.path.abspath(__file__)) +'/../log/'+projectName+'.'+extLog,format='%(asctime)s %(message)s',level=logging.DEBUG)
         __main__()
     else:
         print "Error: filename not valid"
