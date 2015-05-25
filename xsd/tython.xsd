@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    
+    <!-- Types -->
+    <xsd:simpleType name="plainTextT">
+        <xsd:restriction base="xsd:string"/>
+    </xsd:simpleType>
+    <xsd:simpleType name="folderT">
+        <xsd:restriction base="xsd:string"/>
+    </xsd:simpleType>
+    <xsd:simpleType name="urlT">
+        <xsd:restriction base="xsd:string"/>
+    </xsd:simpleType>
+    <xsd:simpleType name="orderT">
+        <xsd:restriction base="xsd:string"/>
+    </xsd:simpleType>
+    <xsd:simpleType name="idT">
+        <xsd:restriction base="xsd:string"/>
+    </xsd:simpleType>
+    <xsd:simpleType name="capBooleanT">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="True"/>
+            <xsd:enumeration value="False"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="fileNameT">
+        <xsd:restriction base="xsd:string"/>
+    </xsd:simpleType>
+    <xsd:simpleType name="resourceTypeT">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="internal"/>
+            <xsd:enumeration value="external"/>
+        </xsd:restriction>
+    </xsd:simpleType>    
+    <xsd:simpleType name="linkT">
+        <xsd:restriction base="xsd:string"/>
+    </xsd:simpleType>
+    <xsd:simpleType name="dateTimeT">
+        <xsd:restriction base="xsd:string"/>
+    </xsd:simpleType>
+    
+    <!-- Structure -->
+    <xsd:element name="site">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="title" type="plainTextT"/>
+                <xsd:element name="subtitle" type="plainTextT"/>
+                <xsd:element name="outputFolder" type="folderT"/>
+                <xsd:element name="contentFolder" type="folderT"/>
+                <xsd:element name="templateFolder" type="folderT"/>
+                <xsd:element name="baseUrl" type="urlT"/>            
+                <xsd:element name="pages">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="page" minOccurs="1" maxOccurs="unbounded">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="title" type="plainTextT" />
+                                        <xsd:element name="subtitle" type="plainTextT" />
+                                        <xsd:element name="order" type="orderT" />
+                                        <xsd:element name="author" type="plainTextT" />
+                                        <xsd:element name="link" type="linkT" />
+                                        <xsd:element name="home" type="capBooleanT" />
+                                        <xsd:element name="resource" type="fileNameT" />
+                                        <xsd:element name="resourceType" type="resourceTypeT" />
+                                        <xsd:element name="template" type="fileNameT" />
+                                        <xsd:element name="createdOn" type="dateTimeT" />                           
+                                    </xsd:sequence>
+                                    <xsd:attribute name="id" type="idT"/>                                    
+                                </xsd:complexType>
+                            </xsd:element>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    
+</xsd:schema>
